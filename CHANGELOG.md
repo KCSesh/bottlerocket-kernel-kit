@@ -1,3 +1,14 @@
+# v5.4.3 (2026-05-11)
+
+## OS Changes
+* Update kernel from 6.1.168-203.330 to 6.1.170-210.320 ([#432])
+* Update kernel from 6.12.80-106.156 to 6.12.83-113.160 ([#431])
+* Update kernel from 6.18.20-41.237 to 6.18.25-55.108 ([#433])
+
+[#431]: https://github.com/bottlerocket-os/bottlerocket-kernel-kit/pull/431
+[#432]: https://github.com/bottlerocket-os/bottlerocket-kernel-kit/pull/432
+[#433]: https://github.com/bottlerocket-os/bottlerocket-kernel-kit/pull/432
+
 # v5.4.2 (2026-05-05)
 
 ## OS Changes
