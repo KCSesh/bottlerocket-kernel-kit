@@ -6,6 +6,7 @@ version = 4
 name = "bottlerocket-kernel-kit"
 version = "0.1.0"
 dependencies = [
+ "eif-init",
  "grub",
  "kernel-6_1",
  "kernel-6_12",
@@ -24,6 +25,10 @@ dependencies = [
  "nvlsm",
  "shim",
 ]
+
+[[package]]
+name = "eif-init"
+version = "0.1.0"
 
 [[package]]
 name = "grub"

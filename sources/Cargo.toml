@@ -1,12 +1,15 @@
 [workspace]
 resolver = "1"
 members = [
+    "eif-init",
     "generate-readme",
     "nvidia-migmanager",
 ]
 
 [workspace.dependencies]
 generate-readme = { version = "0.1", path = "generate-readme" }
+
+nix = { version = "0.29", features = ["mount", "socket"] }
 
 argh = "0.1"
 base64 = "0.22"

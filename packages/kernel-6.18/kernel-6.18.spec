@@ -38,6 +38,9 @@ Source111: config-full-bottlerocket-aarch64-on-aarch64
 Source112: config-full-bottlerocket-x86_64-on-x86_64
 Source113: config-full-bottlerocket-aarch64-on-x86_64
 
+# Guest kernel configuration for Nitro Enclave/Sidecar (EIF) builds.
+Source120: config-bottlerocket-guest-x86_64
+
 # Adjust kernel-devel mount behavior if not squashfs.
 Source210: var-lib-kernel-devel-lower.mount.drop-in.conf.in
 
@@ -163,6 +166,13 @@ Conflicts: %{_cross_os}variant-flavor(nvidia-fips)
 %{summary}.
 %endif
 
+%package vmlinux
+Summary: Uncompressed Linux kernel image for EIF/enclave builds
+Requires: %{name}
+
+%description vmlinux
+%{summary}.
+
 %package headers
 Summary: Header files for the Linux kernel for use by glibc
 
@@ -213,6 +223,13 @@ export ARCH="%{_cross_karch}"
 export CROSS_COMPILE="%{_cross_target}-"
 
 export KCONFIG_CONFIG="arch/%{_cross_karch}/configs/%{_cross_vendor}_defconfig"
+
+# For nitro-guest platform, use the standalone guest config directly.
+# It's a complete config (not a fragment) based on Firecracker's microvm config
+# with Bottlerocket security hardening applied.
+%if "%{_cross_variant_platform}" == "nitro-guest"
+cp %{S:120} "${KCONFIG_CONFIG}"
+%else
 scripts/kconfig/merge_config.sh \
   ../config-%{_cross_arch} \
 %if "%{_cross_arch}" == "x86_64"
@@ -244,6 +261,7 @@ if ! diff "${KCONFIG_CONFIG}" "${SOURCE_FILE}"; then
   echo "error: source and build kernel configurations do not match"
   exit 1
 fi
+%endif
 
 rm -f ../config-* ../*.patch
 cd %{_builddir}
@@ -349,6 +367,7 @@ mv %{buildroot}%{_cross_kmoddir}/neuron_2x_8689/neuron.%{_ko} %{buildroot}%{_cro
 
 install -d %{buildroot}/boot
 install -T -m 0755 arch/%{_cross_karch}/boot/%{_cross_kimage} %{buildroot}/boot/vmlinuz
+install -T -m 0644 vmlinux %{buildroot}/boot/vmlinux
 install -m 0644 .config %{buildroot}/boot/config
 
 find %{buildroot}%{_cross_prefix} \
@@ -1540,3 +1559,6 @@ install -p -m 0644 %{S:301} %{buildroot}%{_cross_bootconfigdir}/05-vmware.conf
 %endif
 
 %changelog
+
+%files vmlinux
+/boot/vmlinux

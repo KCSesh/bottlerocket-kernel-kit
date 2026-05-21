@@ -12,6 +12,7 @@ vendor = "bottlerocket"
 path = "../kit.rs"
 
 [build-dependencies]
+eif-init = { path = "../../packages/eif-init" }
 grub = { path = "../../packages/grub" }
 kernel-6_1 = { path = "../../packages/kernel-6.1" }
 kernel-6_12 = { path = "../../packages/kernel-6.12" }
